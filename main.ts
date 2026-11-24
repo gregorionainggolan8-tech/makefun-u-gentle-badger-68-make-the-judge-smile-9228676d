@@ -6,5 +6,11 @@ import { mkdirSync, writeFileSync } from "node:fs";
 const LINE =
   "Today my neighbour's cat, who has ignored me for two years, chose my lap at 4pm \u2014 and I sat perfectly still for an hour so I wouldn't ruin it.";
 
+// The gate requires 1–200 characters of non-whitespace UTF-8 text; refuse
+// to write anything that would fail it instead of submitting a bad entry.
+if (LINE.length < 1 || LINE.length > 200 || LINE.trim().length === 0) {
+  throw new Error(`line fails the gate: ${LINE.length} characters`);
+}
+
 mkdirSync("/output", { recursive: true });
 writeFileSync("/output/entry.txt", LINE, "utf8");
